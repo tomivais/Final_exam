@@ -1,0 +1,369 @@
+
+
+
+
+Sinä sanoit:
+Exam excample screenshot-foto. 
+
+This API returns a joke in JSON format that has two parts: a setup (question), and a punchline (“funny” response). You can just click in the previous URL to see what it looks like. The app should show both parts of the joke in a layout similar to the one presented in the screenshot.
+ChatGPT sanoi:
+ChatGPT
+It looks like you’ve uploaded an image showing a sample app interface for presenting jokes. Based on your description and the screenshot, you want to create an app that fetches a joke from an API in JSON format, then displays both the setup (question) and punchline (answer) in a layout similar to the one shown.
+
+The steps for this app would include:
+
+Fetch the Joke: Use the API to retrieve the joke, which includes the setup and punchline fields in the JSON response.
+Display the Joke: Format the joke so the setup is shown first (likely in a large text box) and then the punchline (in a smaller box).
+User Interaction: Provide a button like "Get Another Joke" to fetch and display a new joke.
+Layout: The layout would look something like what you showed in the screenshot: a clean design with boxes for the joke parts and a button.
+Would you like help with specific parts of this? For example, I could help you with the code to fetch the joke, layout ideas, or even building the app in a particular framework like React or HTML/CSS.
+
+
+
+
+
+
+Sinä sanoit:
+Make the web app should be styled using React Bootstrap components and CSS.
+ChatGPT sanoi:
+ChatGPT
+Sure! To build a React web app that displays jokes using Bootstrap components and CSS, you'll need to follow these steps:
+
+Steps to Build the Web App
+Install Dependencies: You'll need React, Bootstrap, and React-Bootstrap for UI components.
+Fetch Jokes from API: Use a joke API to retrieve a joke in JSON format.
+Display Setup and Punchline: Show the setup (question) and punchline (answer) using React-Bootstrap components.
+Button for New Joke: Provide a button to fetch a new joke.
+Prerequisites
+Node.js and npm installed.
+Setup the Project
+Initialize a React app:
+
+bash
+Kopioi koodi
+npx create-react-app joke-app
+cd joke-app
+Install Bootstrap and React-Bootstrap:
+
+bash
+Kopioi koodi
+npm install react-bootstrap bootstrap
+Link Bootstrap CSS: Add the following line in src/index.js to import Bootstrap styles:
+
+javascript
+Kopioi koodi
+import 'bootstrap/dist/css/bootstrap.min.css';
+Code for the App
+Now, let's write the app. Here’s how you can create a simple joke-fetching web app using React and React-Bootstrap.
+
+App.js:
+
+javascript
+Kopioi koodi
+import React, { useState, useEffect } from 'react';
+import { Container, Row, Col, Button, Card, Spinner } from 'react-bootstrap';
+import './App.css';
+
+const App = () => {
+  const [joke, setJoke] = useState({ setup: '', punchline: '' });
+  const [loading, setLoading] = useState(false);
+
+  // Function to fetch a joke
+  const fetchJoke = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('https://official-joke-api.appspot.com/random_joke');
+      const data = await response.json();
+      setJoke(data);
+    } catch (error) {
+      console.error('Error fetching joke:', error);
+    }
+    setLoading(false);
+  };
+
+  // Fetch a joke when the component mounts
+  useEffect(() => {
+    fetchJoke();
+  }, []);
+
+  return (
+    <Container className="d-flex flex-column justify-content-center align-items-center min-vh-100">
+      <Row className="justify-content-center">
+        <Col xs={12} md={8} lg={6}>
+          <Card className="text-center shadow">
+            <Card.Body>
+              {loading ? (
+                <Spinner animation="border" variant="primary" />
+              ) : (
+                <>
+                  <Card.Title>{joke.setup}</Card.Title>
+                  <Card.Text className="punchline">{joke.punchline}</Card.Text>
+                </>
+              )}
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+      <Row className="mt-4">
+        <Col xs={12} className="text-center">
+          <Button onClick={fetchJoke} variant="primary">
+            {loading ? 'Loading...' : 'Get Another Joke'}
+          </Button>
+        </Col>
+      </Row>
+    </Container>
+  );
+};
+
+export default App;
+App.css (For some custom styles):
+
+css
+Kopioi koodi
+.min-vh-100 {
+  min-height: 100vh;
+}
+
+.punchline {
+  font-size: 1.5rem;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.shadow {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button {
+  font-size: 1.25rem;
+  padding: 0.5rem 2rem;
+}
+Breakdown of the Code
+Fetching the Joke:
+
+The fetchJoke function fetches a joke from the public joke API. The joke is stored in the joke state, which contains the setup and punchline.
+We use the useEffect hook to automatically fetch a joke when the component first renders.
+Loading Spinner:
+
+While the joke is being fetched, a spinner is shown using the Spinner component from React-Bootstrap.
+If the data is loaded, the setup and punchline are displayed.
+Layout:
+
+We use Container, Row, and Col from React-Bootstrap to center the content on the page.
+The joke setup and punchline are displayed in a Card.
+A button triggers fetching a new joke.
+CSS Styling:
+
+Minimal custom CSS is used to enhance the look (e.g., making the punchline bold and adding some shadow to the card).
+Run the App
+Start the development server:
+
+bash
+Kopioi koodi
+npm start
+Open the browser and navigate to http://localhost:3000. You should see a joke with a button to fetch a new one!
+
+This should give you a clean, responsive, and styled web app that shows jokes in a layout similar to the screenshot you provided. Let me know if you need further adjustments or additional features!
+
+
+
+
+
+
+Sinä sanoit:
+Additional requirements:
+
+The app shows a spinner animation while a joke is loading.
+
+The app shows an error notification in the bottom left corner of the page when there is an error retrieving the joke from the REST API or there is any other problem in this step 
+
+The app has a button to change languages. There should be two languages available: English, and any other language that you choose. The only text that needs to be available in the two languages is the one in the two buttons “Get Random joke” and “Change language”.
+
+The app should be responsive and should be able to be consumed from mobile phones and tablets.
+ChatGPT sanoi:
+ChatGPT
+To meet the additional requirements, we will modify the app as follows:
+
+Spinner Animation: We'll already have the spinner to show when the joke is loading, but we can ensure this is implemented properly.
+
+Error Notification: We'll add a notification that appears in the bottom left corner when there’s an error retrieving a joke.
+
+Language Toggle: A button to switch between two languages (e.g., English and Spanish). The text of the buttons “Get Another Joke” and “Change Language” will update accordingly.
+
+Responsive Design: Ensure the app looks good on mobile and tablet devices by adjusting the layout with CSS and Bootstrap classes.
+
+Updates to the Existing Code
+Install React Toast Notifications
+We'll use react-toastify to handle the error notification.
+
+bash
+Kopioi koodi
+npm install react-toastify
+Update App.js
+Here is the updated App.js to handle language switching, errors, and showing a spinner while fetching jokes:
+
+javascript
+Kopioi koodi
+import React, { useState, useEffect } from 'react';
+import { Container, Row, Col, Button, Card, Spinner, Alert } from 'react-bootstrap';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './App.css';
+
+const App = () => {
+  const [joke, setJoke] = useState({ setup: '', punchline: '' });
+  const [loading, setLoading] = useState(false);
+  const [language, setLanguage] = useState('en');
+  const [error, setError] = useState(false);
+
+  const translations = {
+    en: {
+      jokeButton: 'Get Another Joke',
+      langButton: 'Change Language',
+    },
+    es: {
+      jokeButton: 'Obtener otra broma',
+      langButton: 'Cambiar idioma',
+    },
+  };
+
+  // Function to fetch a joke
+  const fetchJoke = async () => {
+    setLoading(true);
+    setError(false);
+    try {
+      const response = await fetch('https://official-joke-api.appspot.com/random_joke');
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setJoke(data);
+    } catch (error) {
+      setError(true);
+      toast.error('Error fetching joke! Please try again later.');
+    }
+    setLoading(false);
+  };
+
+  // Fetch a joke when the component mounts
+  useEffect(() => {
+    fetchJoke();
+  }, []);
+
+  // Function to toggle language
+  const toggleLanguage = () => {
+    setLanguage((prevLang) => (prevLang === 'en' ? 'es' : 'en'));
+  };
+
+  return (
+    <Container className="d-flex flex-column justify-content-center align-items-center min-vh-100">
+      <Row className="justify-content-center">
+        <Col xs={12} md={8} lg={6}>
+          <Card className="text-center shadow">
+            <Card.Body>
+              {loading ? (
+                <Spinner animation="border" variant="primary" />
+              ) : (
+                <>
+                  <Card.Title>{joke.setup}</Card.Title>
+                  <Card.Text className="punchline">{joke.punchline}</Card.Text>
+                </>
+              )}
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+      <Row className="mt-4">
+        <Col xs={12} className="text-center">
+          <Button onClick={fetchJoke} variant="primary">
+            {loading ? 'Loading...' : translations[language].jokeButton}
+          </Button>
+        </Col>
+      </Row>
+      <Row className="mt-2">
+        <Col xs={12} className="text-center">
+          <Button onClick={toggleLanguage} variant="secondary">
+            {translations[language].langButton}
+          </Button>
+        </Col>
+      </Row>
+      {/* Toast Notifications */}
+      <ToastContainer position="bottom-left" autoClose={5000} />
+    </Container>
+  );
+};
+
+export default App;
+Changes Breakdown:
+Error Handling:
+
+We’ve added a try-catch block around the joke-fetching code. If there is an error (network or other), we show a toast notification at the bottom left of the screen using react-toastify. The error message displays for 5 seconds.
+
+The setError(true) flag is set when an error occurs, though the app doesn't halt—it just displays the error message.
+
+Language Toggle:
+
+The translations object holds button texts in English and Spanish.
+The language state holds the current language (en for English or es for Spanish).
+The toggleLanguage function toggles between the two languages, updating the text of the "Get Another Joke" and "Change Language" buttons.
+Spinner and Button Text:
+
+While the joke is being fetched, we show a spinner in place of the joke text and disable the button text to "Loading...".
+Once the joke has loaded, the spinner is replaced with the joke, and the button text updates according to the selected language.
+Toast Notification:
+
+The ToastContainer from react-toastify is placed in the layout, and toast.error() is used to show an error message if fetching the joke fails.
+Update App.css
+For responsive styling and to ensure the app looks good on mobile and tablets:
+
+css
+Kopioi koodi
+.min-vh-100 {
+  min-height: 100vh;
+}
+
+.punchline {
+  font-size: 1.5rem;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.shadow {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button {
+  font-size: 1.25rem;
+  padding: 0.5rem 2rem;
+}
+
+@media (max-width: 768px) {
+  .punchline {
+    font-size: 1.25rem;
+  }
+
+  button {
+    font-size: 1rem;
+    padding: 0.5rem 1.5rem;
+  }
+}
+Explanation of Changes
+Responsiveness:
+We added a media query to adjust font sizes and padding for smaller screens (e.g., mobile phones).
+Styling:
+The same design principles were applied, keeping the min-vh-100 class to ensure full-screen height, while maintaining good padding for buttons and text readability on both small and large screens.
+Final Steps:
+Run the App:
+
+bash
+Kopioi koodi
+npm start
+Open http://localhost:3000 in a browser, and try switching between English and Spanish, observing how the buttons and the error notification work.
+
+This solution covers all the requirements:
+
+A spinner animation is shown while the joke is being fetched.
+An error notification appears in the bottom left corner in case of an issue.
+The app has a language toggle between English and Spanish.
+It’s fully responsive for mobile and tablets.
+Let me know if you need any more tweaks or if there's another language you want to use!

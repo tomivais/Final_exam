@@ -4,7 +4,6 @@
 
 Sinä sanoit:
 Exam excample screenshot-foto. 
-
 This API returns a joke in JSON format that has two parts: a setup (question), and a punchline (“funny” response). You can just click in the previous URL to see what it looks like. The app should show both parts of the joke in a layout similar to the one presented in the screenshot.
 ChatGPT sanoi:
 ChatGPT

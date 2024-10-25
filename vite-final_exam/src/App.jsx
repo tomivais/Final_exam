@@ -106,7 +106,7 @@ const App = () => {
       <br /><br />
       <Row className="justify-content-left">
         <Col xs={6} md={4} className="d-flex justify-content-left">
-          <Button onClick={fetchJoke} variant="primary">
+          <Button onClick={fetchJoke} variant="primary" >
             {loading ? translations[language].loading : translations[language].jokeButton}
           </Button>
         </Col>
